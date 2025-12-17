@@ -28,4 +28,10 @@ jobs:
           coverage xml
 
       - name: Run SonarQube Scan
-        run: pysonar -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.projectKey=Coverage-scan -Dsonar.sources=. -Dsonar.python.coverage.reportPaths=coverage.xml
+        run: >
+          pysonar
+          --sonar-host-url ${{ secrets.SONAR_HOST_URL }}
+          -t ${{ secrets.SONAR_TOKEN }}
+          --sonar-project-key coverage-scan
+          --sonar-sources .
+          --sonar-python-coverage-report-paths coverage.xml
