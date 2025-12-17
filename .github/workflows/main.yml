@@ -31,6 +31,6 @@ jobs:
           pysonar \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-            -Dsonar.projectKey=py_calculator \
+            -Dsonar.projectKey=Coverage-scan \
             -Dsonar.sources=. \
             -Dsonar.python.coverage.reportPaths=coverage.xml
