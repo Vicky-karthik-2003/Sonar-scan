@@ -1,33 +1,27 @@
-name: SonarQube Scan
+name: Build
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - master
+
 
 jobs:
-  sonar:
+  build:
+    name: Build and analyze
     runs-on: self-hosted
-
+    
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
-
-      - name: Install tools
-        run: pip install pytest coverage pysonar
-
-      - name: Run tests
-        run: |
-          coverage run -m pytest
-          coverage xml
-
-      - name: Run SonarQube Scan
-        shell: powershell
-        run: >
-           pysonar --sonar-host-url ${{ secrets.SONAR_HOST_URL }} -t ${{ secrets.SONAR_TOKEN }} --sonar-project-key coverage-scan --sonar-sources . --sonar-python-coverage-report-paths coverage.xml
-
-
-      
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # If you wish to fail your job when the Quality Gate is red, uncomment the
+      # following lines. This would typically be used to fail a deployment.
+      # - uses: SonarSource/sonarqube-quality-gate-action@v1
+      #   timeout-minutes: 5
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
