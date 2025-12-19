@@ -5,8 +5,8 @@ on:
 
 jobs:
   build:
-    name: Build and analyze
-    runs-on: self-hosted
+    name: Build and SonarQube Analyze
+    runs-on: [self-hosted, windows]
 
     steps:
       - name: Checkout code
@@ -14,9 +14,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Optional: verify Java (SonarScanner requires Java)
+      - name: Verify Java
+        run: java -version
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_PROJECT_KEY: coverage-scan
